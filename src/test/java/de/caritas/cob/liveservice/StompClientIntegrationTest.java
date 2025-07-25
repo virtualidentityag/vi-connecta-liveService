@@ -18,10 +18,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import lombok.SneakyThrows;
-import org.junit.runner.RunWith;
 import org.keycloak.common.VerificationException;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -34,7 +33,6 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSession.Subscription;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -42,9 +40,8 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = StompClientIntegrationTest.TestConfig.class)
+    classes = {StompClientIntegrationTest.TestConfig.class, TaskSchedulerConfig.class})
 public abstract class StompClientIntegrationTest extends AbstractJUnit4SpringContextTests {
 
   protected static final String SUBSCRIPTION_ENDPOINT = "/user/events";
@@ -58,7 +55,7 @@ public abstract class StompClientIntegrationTest extends AbstractJUnit4SpringCon
   };
 
   @LocalServerPort
-  private Integer port;
+  private int port;
 
   private final WebSocketStompClient socketStompClient = new WebSocketStompClient(
       new SockJsClient(singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
@@ -68,7 +65,7 @@ public abstract class StompClientIntegrationTest extends AbstractJUnit4SpringCon
   public static class TestConfig {
 
     @Bean
-    public KeycloakTokenObserver keycloakTokenObserver() throws VerificationException {
+    KeycloakTokenObserver keycloakTokenObserver() throws VerificationException {
       KeycloakTokenObserver observer = mock(KeycloakTokenObserver.class);
       when(observer.observeUserId(FIRST_VALID_USER)).thenReturn("validated user 1");
       when(observer.observeUserId(SECOND_VALID_USER)).thenReturn("validated user 2");
@@ -95,7 +92,7 @@ public abstract class StompClientIntegrationTest extends AbstractJUnit4SpringCon
     StompHeaders connectHeaders = new StompHeaders();
     connectHeaders.add("accessToken", accessToken);
     ListenableFuture<StompSession> connect = socketStompClient.connect(
-        String.format(SOCKET_URL, port), new WebSocketHttpHeaders(), connectHeaders,
+        SOCKET_URL.formatted(port), new WebSocketHttpHeaders(), connectHeaders,
         sessionHandler);
     return connect.get(3, TimeUnit.SECONDS);
   }

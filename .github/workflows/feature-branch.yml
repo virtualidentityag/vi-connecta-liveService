@@ -17,12 +17,12 @@ jobs:
       - name: Setup JVM
         uses: actions/setup-java@v2
         with:
-          java-version: "11"
+          java-version: 17.0.7
           distribution: "adopt"
           architecture: x64
 
       - name: Caching maven dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         env:
           cache-name: cache-maven-dependencies
         with:

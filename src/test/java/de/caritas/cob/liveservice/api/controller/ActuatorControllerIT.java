@@ -1,6 +1,5 @@
 package de.caritas.cob.liveservice.api.controller;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -35,7 +35,7 @@ class ActuatorControllerIT {
   @Test
   void getHealtcheck_Should_returnHealtcheck() throws Exception {
     mockMvc
-        .perform(get("/actuator/health").contentType(APPLICATION_JSON))
+        .perform(get("/actuator/health").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("status", is("UP")));
   }
@@ -43,11 +43,11 @@ class ActuatorControllerIT {
   @Test
   void getActuatorEndpoints_Should_returnNotFound_When_ActuatorEndpointsNotExposed() throws Exception {
     mockMvc
-        .perform(get("/actuator/env").contentType(APPLICATION_JSON))
+        .perform(get("/actuator/env").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
 
     mockMvc
-        .perform(get("/actuator/beans").contentType(APPLICATION_JSON))
+        .perform(get("/actuator/beans").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
 }
