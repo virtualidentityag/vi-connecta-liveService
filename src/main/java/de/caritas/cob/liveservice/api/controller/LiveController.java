@@ -5,8 +5,8 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import de.caritas.cob.liveservice.api.facade.LiveEventFacade;
 import de.caritas.cob.liveservice.api.model.LiveEventMessage;
 import de.caritas.cob.liveservice.generated.api.controller.LiveeventApi;
-import io.swagger.annotations.Api;
-import javax.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ import org.springframework.web.server.ResponseStatusException;
  * Controller for triggering live events.
  */
 @RestController
+@Tag(name = "live-controller")
 @RequiredArgsConstructor
-@Api(tags = "live-controller")
 public class LiveController implements LiveeventApi {
 
   private final @NonNull LiveEventFacade liveEventFacade;

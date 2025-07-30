@@ -3,7 +3,6 @@ package de.caritas.cob.liveservice.websocket.stomphandler;
 import static java.util.Objects.requireNonNull;
 
 import de.caritas.cob.liveservice.websocket.registry.SocketUserRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class StompErrorHandler extends StompRemoveHandler {
 
-  @Autowired
   public StompErrorHandler(SocketUserRegistry socketUserRegistry) {
     super(requireNonNull(socketUserRegistry));
   }
